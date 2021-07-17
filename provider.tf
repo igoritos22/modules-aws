@@ -9,7 +9,7 @@ provider "aws" {
 }
 terraform {
   backend "s3" {
-    bucket = "dpsp-terraform-seginfo-seg"
+    bucket = "terraform-seginfo-seg"
     key    = "alarmscis/cisalarms.tfstate"
     region = "sa-east-1"
   }
