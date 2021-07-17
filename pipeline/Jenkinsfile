@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+    stages {
+        stage('Plano da infraestrutura') {
+             environment {
+                AWS_PROFILE = 'poc'
+            }
+            steps {
+              sh 'terraform init -upgrade'
+              sh 'terraform workspace list && terraform workspace select dev'
+              sh 'terraform plan'
+            }
+        }
+        stage('Aprovar apply do terraform?'){
+            steps {
+                input "Proceder com o apply?"
+            }
+        }
+        stage('Terraform Apply') {
+             environment {
+                AWS_PROFILE = 'poc'
+            }
+            steps {
+              sh 'terraform init -upgrade'
+              sh 'terraform workspace list && terraform workspace select dev'
+              sh 'terraform apply --auto-approve'
+            }
+        }
+    }
+}
+
+
