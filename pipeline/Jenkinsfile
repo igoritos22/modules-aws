@@ -1,32 +1,38 @@
+//versao: 1.0
 pipeline {
     agent any
     stages {
-        stage('Plano da infraestrutura') {
+        stage('[Plano da infraestrutura]') {
              environment {
                 AWS_PROFILE = 'poc'
             }
             steps {
-              sh 'terraform init -upgrade'
-              sh 'terraform workspace list && terraform workspace select dev'
-              sh 'terraform plan'
+              sh 'terraform init --upgrade'
+              sh 'terraform workspace list && terraform workspace select poc'
+              sh 'terraform plan --out=plano'
+              sh 'terraform show plano'
             }
         }
-        stage('Aprovar apply do terraform?'){
+        stage('[SAST]') {
+            steps {
+                sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src -e HORUSEC_CLI_PRINT_OUTPUT_TYPE=\'json\' -e HORUSEC_CLI_JSON_OUTPUT_FILEPATH=\'/src/output.json\' horuszup/horusec-cli:latest horusec start -p /src -P $(pwd) -I="true"'
+
+            }
+        }
+        stage('[Aprovar apply do terraform?]'){
             steps {
                 input "Proceder com o apply?"
             }
         }
-        stage('Terraform Apply') {
+        stage('[Terraform Apply]') {
              environment {
                 AWS_PROFILE = 'poc'
             }
             steps {
               sh 'terraform init -upgrade'
-              sh 'terraform workspace list && terraform workspace select dev'
+              sh 'terraform workspace list && terraform workspace select poc'
               sh 'terraform apply --auto-approve'
             }
         }
     }
 }
-
-
