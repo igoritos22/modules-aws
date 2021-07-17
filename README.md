@@ -6,7 +6,7 @@
 module "sns" {
   source         = "./modules/sns"
   sns_topic_name = "nome_do_seu_topic"
-  endpoint       = "iluiz.sousa@gmail.com" //quem recebera o email
+  endpoint       = "iluiz.sousa@gmail.com" #quem recebera o email
 }
 module "identificacao_do_seu_modulo" {
   source              = "./modules/cloudwatch" 
@@ -18,7 +18,7 @@ module "identificacao_do_seu_modulo" {
   statistic           = "media_valor_atual_ou_sumarizado"
   threshold           = "treshold_que_ira_ativar_o_alerta"
   alarm_description   = "Descrição simples do seu alarma"
-  sns_arn             = module.sns.sns_arn // caso esteja usando o modulo de sns
+  sns_arn             = module.sns.sns_arn #caso esteja usando o modulo de sns
 }
 ```
 
