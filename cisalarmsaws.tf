@@ -15,7 +15,6 @@ module "cis_UnauthorizedAPICall" {
   alarm_description   = "Detecção chamadas não autorizadas na API da AWS"
   sns_arn             = module.sns.sns_arn
 }
-
 module "cis_IAMChanges" {
   source              = "./modules/cloudwatch"
   metric_name         = "IAMChangePolicy"
